@@ -1,4 +1,5 @@
 sh n.sh
-PIC= $(echo pwd)
+PIC=$(pwd)
+PIC=$PIC'/image.jpg'
 echo $PIC
-gsettings set org.gnome.desktop.background picture-uri "file://$PIC/image.jpg"
+gsettings set org.gnome.desktop.background picture-uri 'file://$PIC'
