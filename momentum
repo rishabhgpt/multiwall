@@ -1,0 +1,29 @@
+#!/bin/bash
+export http_proxy=""
+export https_proxy=""
+while true; do
+    # testing...
+    LC_ALL=C nmcli -t -f DEVICE,STATE dev | grep -q "^wlan0:connected$"
+    if [ $? -eq 0 ]; then
+        break
+    else
+        # not connected, sleeping for a second
+        sleep 1
+    fi
+done
+wget -q http://momentumdash.com/app/backgrounds.json
+cat backgrounds.json | grep -o https://www.flickr.com/photos[^\"]*>walls
+IFS=$'\n'
+for j in `cat ./walls|shuf`
+do
+j=$(echo $j/sizes/l)
+echo "Downloading from $j";
+id=$(wget -q $j -O -|grep -o https://farm[^\"]*b.jpg)
+wget -nc $id
+j=$(ls|grep *.jpg)
+mv *.jpg /tmp
+gsettings set org.gnome.desktop.background picture-uri "file:///tmp/$j"
+sleep 1800
+done
+rm *json* /tmp
+
