@@ -11,8 +11,9 @@ j=$(echo $j|cut -c5-|rev|cut -c16-|rev)
 wget -nc http://imgur.com/$j.jpg -P /tmp
 #id=$(wget -q http://bing.com -O -| grep -o url:[^' '\\]*jpg|cut -c6-)
 #wget -nc http://bing.com"$id"
-mv *jpg back.jpg
+#mv *jpg back.jpg
 #gsettings set org.gnome.desktop.background picture-uri "file:///home/rishabh/Bing/back.jpg"
 gsettings set org.gnome.desktop.background picture-uri "file:///tmp/$j.jpg"
 sleep 300
 done
+./imgur

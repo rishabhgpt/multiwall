@@ -13,6 +13,7 @@ while true; do
 done
 wget -q http://momentumdash.com/app/backgrounds.json
 cat backgrounds.json | grep -o https://www.flickr.com/photos[^\"]*>walls
+rm backgrounds.json
 IFS=$'\n'
 for j in `cat ./walls|shuf`
 do
@@ -25,5 +26,4 @@ mv *.jpg /tmp
 gsettings set org.gnome.desktop.background picture-uri "file:///tmp/$j"
 sleep 1800
 done
-rm *json* /tmp
 
