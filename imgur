@@ -13,7 +13,11 @@ wget -nc http://imgur.com/$j.jpg -P /tmp
 #wget -nc http://bing.com"$id"
 #mv *jpg back.jpg
 #gsettings set org.gnome.desktop.background picture-uri "file:///home/rishabh/Bing/back.jpg"
-gsettings set org.gnome.desktop.background picture-uri "file:///tmp/$j.jpg"
+r=$(echo $?)
+if [ $r=0 ]
+then
+	gsettings set org.gnome.desktop.background picture-uri "file:///tmp/$j.jpg"
+fi
 sleep 300
 done
 ./imgur
