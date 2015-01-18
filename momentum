@@ -33,9 +33,13 @@ else
 	echo "Downloading url $id";
 fi
 wget -nc $id
-j=$(ls|grep *.jpg)
-mv *.jpg /tmp
-gsettings set org.gnome.desktop.background picture-uri "file:///tmp/$j"
+r=$(echo $?)
+if [ $r=0 ]
+then 
+	j=$(ls|grep *.jpg)
+	mv *.jpg /tmp
+	gsettings set org.gnome.desktop.background picture-uri "file:///tmp/$j"
+fi
 sleep 300
 rm /tmp/*.jpg
 done
