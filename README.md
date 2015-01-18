@@ -6,7 +6,7 @@ A set of bash shell scripts to periodically download and change wallpaper accord
 Currently Supported Sites
 =========================
 
-> imgur.com\wallpapers
+> imgur.com/r/wallpapers
 
 > momentumdash.com (500px and flickr only)
 
