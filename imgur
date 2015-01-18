@@ -4,6 +4,7 @@ export https_proxy=""
 rm wallpaper*
 wget -q imgur.com/r/wallpapers
 grep -oE id=[^\\]{10}class=\"post\"\> wallpapers>walls
+rm wallpaper*
 IFS=$'\n'      
 for j in `cat ./walls`
 do
