@@ -14,7 +14,7 @@ done
 wget -q http://momentumdash.com/app/backgrounds.json
 cat backgrounds.json | grep -o https://www.flickr.com/photos[^\"]*>flickr
 cat backgrounds.json | grep -o http://500px.com/photo[^\"]*>px
-#rm backgrounds.json
+rm backgrounds.json* 
 cat flickr px > walls.log
 rm flickr px
 IFS=$'\n'
@@ -33,7 +33,7 @@ else
 	echo "Downloading url $id";
 fi
 wget -nc $id
-r=$(echo $?)
+r=$(echo $?)        ###Check if image is downloaded or not###
 if [ $r=0 ]
 then 
 	j=$(ls|grep *.jpg)
