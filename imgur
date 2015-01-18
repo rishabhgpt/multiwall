@@ -1,7 +1,6 @@
 #!/bin/bash
 export http_proxy=""
 export https_proxy=""
-rm wallpaper*
 wget -q imgur.com/r/wallpapers
 grep -oE id=[^\\]{10}class=\"post\"\> wallpapers>walls
 rm wallpaper*
