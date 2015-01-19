@@ -1,9 +1,12 @@
 #!/bin/bash
 export http_proxy=""
 export https_proxy=""
+
 rm /tmp/*jpg 2> /dev/null
-printf "Hello $USER, Welcome to multiwall.\nEnter your choice\n 1.From imgur.com \n 2.From flickr/500px (featured at momentumdash.com) \n 3.Local directory\n 4. Bing Daily Wallpaper\n";
+
+printf "Hello $USER, Welcome to multiwall.\nEnter your choice\n 1.From imgur.com \n 2.From /r/EarthPorn \n 3.Local directory\n 4. Bing Daily Wallpaper\n ";
 read choice;
+
 if [ $choice -eq '1' ]
 then
 	wget -q https://imgur.com/r/wallpapers
@@ -21,29 +24,29 @@ then
 	fi
 	sleep 300
 	done
+
 elif [ $choice -eq '2' ]
 then 
-	wget -q http://momentumdash.com/app/backgrounds.json
-	cat backgrounds.json | grep -o https://www.flickr.com/photos[^\"]*>flickr
-	cat backgrounds.json | grep -o http://500px.com/photo[^\"]*>px
-	rm backgrounds.json* 2> /dev/null
-	cat flickr px > walls.log
-	rm flickr px 2> /dev/null
+	wget  -q https://www.reddit.com/r/earthporn -O -|grep -oP '\"title may-blank \" href=\"[^\n]*? tabindex=\"1\"'|cut -c26-| grep -oP '[^\n]*\"'|rev|cut -c15-|rev > walls.log
+	tail -n +2 "walls.log" > wall.log
+	rm walls.log
 	IFS=$'\n'
-	for j in `cat ./walls.log`
+	for j in `cat ./wall.log`
 	do
-		temp=$(echo $j|cut -c 13-18)
-		if [ "$temp" == "flickr" ]
+		temp=$(echo $j|cut -c 8-9)
+		if [ "$temp" == "i." ]
 		then 
-			j=$(echo $j/sizes/l)
-			echo "Downloading from Flickr";
-			id=$(wget -q $j -O -|grep -o https://farm[^\"]*b.jpg)
-			echo "Downloading url $id";
+			echo "Downloading from Imgur";
+			id=$j;
+		elif [ "$temp" == "im" ]
+		then
+			j="$j.jpg";
+			echo "Downloading from $j";
+			id="$j";
 		else 
-			echo "Downloading from 500px";
-			id=$(wget -q $j -O -|grep -o https://ppcdn.500px.org/[^\"]*2048.jpg)
-		echo "Downloading url $id";
+			continue;
 		fi
+		echo "URL $id"
 		wget -nc -q $id
 		r=$(echo $?)        ###Check if image is downloaded or not###
 		if [ $r=0 ]
@@ -55,6 +58,7 @@ then
 		sleep 300
 	rm /tmp/*.jpg
 done
+
 elif [ $choice -eq '3' ]
 then 
 	printf "Enter absolute path of directory containing images\n";
@@ -66,6 +70,7 @@ then
 		gsettings set org.gnome.desktop.background picture-uri "file://$pic"
 		sleep 300
 	done
+
 elif [ $choice -eq '4' ]
 then
 	id=$(wget -q http://bing.com -O -| grep -o url:[^' '\\]*jpg|cut -c6-)
@@ -73,5 +78,6 @@ then
 	wget -nc -q http://bing.com"$id" -P /tmp
 	gsettings set org.gnome.desktop.background picture-uri "file:///tmp/$image"
 else
-	printf "Enter Valid Choice\n"	
+	printf "You chose poorly!\n"	
 fi
+./multiwall-v*
