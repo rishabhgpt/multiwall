@@ -8,8 +8,10 @@ Currently Supported Sites
 
 > imgur.com/r/wallpapers
 
-> momentumdash.com (500px and flickr only)
+> /r/EarthPorn
 
 > bing.com (Bing Today's Wallpaper)
+
+> Local images support 
 
 > More coming soon...
