@@ -31,23 +31,17 @@
         <h3>
 <a id="welcome-to-multiwall" class="anchor" href="#welcome-to-multiwall" aria-hidden="true"><span class="octicon octicon-link"></span></a>Welcome to multiwall.</h3>
 
-<p>To retrieve your wallpapers from momentumdash app :</p>
+<p>To retrieve your wallpapers (according to prefernece):</p>
 
-<pre><code>$ git clone http://github.com/rishabhgpt
+<pre>
+<code>
+$ git clone http://github.com/rishabhgpt
 $ cd multiwall
-$ chmod 755 momentum imgur
-$ crontab -e
+$ chmod 755 multiwall
+$ ./multiwall 
+</code>
+</pre>
 
-</code></pre>
-
-<p>Now add momentum script as daily cronjob</p>
-
-<pre><code>
-$ 0 10 * * * /path/to/multiwall/momentum
-
-</code></pre>
-
-<p>Similar process for imgur script</p>
 
 <h3>
 <a id="authors-and-contributors" class="anchor" href="#authors-and-contributors" aria-hidden="true"><span class="octicon octicon-link"></span></a>Authors and Contributors</h3>
