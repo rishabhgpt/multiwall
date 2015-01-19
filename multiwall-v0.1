@@ -1,0 +1,77 @@
+#!/bin/bash
+export http_proxy=""
+export https_proxy=""
+rm /tmp/*jpg 2> /dev/null
+printf "Hello $USER, Welcome to multiwall.\nEnter your choice\n 1.From imgur.com \n 2.From flickr/500px (featured at momentumdash.com) \n 3.Local directory\n 4. Bing Daily Wallpaper\n";
+read choice;
+if [ $choice -eq '1' ]
+then
+	wget -q https://imgur.com/r/wallpapers
+	grep -oE id=[^\\]{10}class=\"post\"\> wallpapers>walls
+	rm wallpaper*
+	IFS=$'\n'      
+	for j in `cat ./walls`
+	do
+	j=$(echo $j|cut -c5-|rev|cut -c16-|rev)
+	wget -nc -q https://imgur.com/$j.jpg -P /tmp
+	r=$(echo $?)
+	if [ $r=0 ]
+	then
+		gsettings set org.gnome.desktop.background picture-uri "file:///tmp/$j.jpg"
+	fi
+	sleep 300
+	done
+elif [ $choice -eq '2' ]
+then 
+	wget -q http://momentumdash.com/app/backgrounds.json
+	cat backgrounds.json | grep -o https://www.flickr.com/photos[^\"]*>flickr
+	cat backgrounds.json | grep -o http://500px.com/photo[^\"]*>px
+	rm backgrounds.json* 2> /dev/null
+	cat flickr px > walls.log
+	rm flickr px 2> /dev/null
+	IFS=$'\n'
+	for j in `cat ./walls.log`
+	do
+		temp=$(echo $j|cut -c 13-18)
+		if [ "$temp" == "flickr" ]
+		then 
+			j=$(echo $j/sizes/l)
+			echo "Downloading from Flickr";
+			id=$(wget -q $j -O -|grep -o https://farm[^\"]*b.jpg)
+			echo "Downloading url $id";
+		else 
+			echo "Downloading from 500px";
+			id=$(wget -q $j -O -|grep -o https://ppcdn.500px.org/[^\"]*2048.jpg)
+		echo "Downloading url $id";
+		fi
+		wget -nc -q $id
+		r=$(echo $?)        ###Check if image is downloaded or not###
+		if [ $r=0 ]
+		then 
+			j=$(ls|grep *.jpg)
+			mv *.jpg /tmp
+			gsettings set org.gnome.desktop.background picture-uri "file:///tmp/$j"
+		fi
+		sleep 300
+	rm /tmp/*.jpg
+done
+elif [ $choice -eq '3' ]
+then 
+	printf "Enter absolute path of directory containing images\n";
+	read path;
+	i=1;
+	while [ $i -eq 1 ]
+	do
+		pic=$(ls $path/*jpg|shuf -n1)
+		gsettings set org.gnome.desktop.background picture-uri "file://$pic"
+		sleep 300
+	done
+elif [ $choice -eq '4' ]
+then
+	id=$(wget -q http://bing.com -O -| grep -o url:[^' '\\]*jpg|cut -c6-)
+	image=$(echo $id|rev|grep -o '[^/\]*'|rev|grep -o '[^/\]*jpg')
+	wget -nc -q http://bing.com"$id" -P /tmp
+	gsettings set org.gnome.desktop.background picture-uri "file:///tmp/$image"
+else
+	printf "Enter Valid Choice\n"	
+fi
