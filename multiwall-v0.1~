@@ -52,6 +52,7 @@ then
 		echo "URL $id"
 		wget -nc -q $id -P $DIR
 		r=$(echo $?)        ###Check if image is downloaded or not###
+		echo $r
 		if [ $r=0 ]
 		then 
 			j=$(ls $DIR|grep [^\\]*.jpg)
